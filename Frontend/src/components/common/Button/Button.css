@@ -1,0 +1,17 @@
+button {
+	letter-spacing: 1px;
+	font-weight: bold;
+	padding: 10px 15px;
+	border-radius: 5px;
+	border-color: black;
+	margin: 10px;
+}
+
+button:hover {
+	background-color: #ffffff97;
+	color: #272e27;
+}
+
+button:active {
+	background-color: red;
+}
