@@ -1,0 +1,29 @@
+.form-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-color: var(--grey-base);
+    border-width: var(--test-sm);
+    margin: 10% 30%;
+    border-radius: 10%;
+    background-color: var(--grey-tint);
+}
+
+form {
+    margin-top: 50px;
+    max-width: 800px;
+    min-height: 400px;
+    margin: auto;
+}
+
+.field-container {
+    max-width: 50%;
+    text-align: start;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 10px;
+    justify-content: start;
+    align-items: center;
+    margin: 0;
+}

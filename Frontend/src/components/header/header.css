@@ -1,0 +1,12 @@
+header-container {
+}
+
+h1 {
+    padding-left: 2rem;
+    margin: 1rem;
+    font-size: 3rem;
+}
+
+span {
+    columns: var(--primary-color);
+}

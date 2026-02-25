@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import api from "./js.files/Fetcher";
-import Form from "../components/Form";
+import api from "../services/js.files/Fetcher";
+import Form from "./common/form/Form";
 
 export default function AuthHandler({ type }) {
     const isRegister = type === "register";

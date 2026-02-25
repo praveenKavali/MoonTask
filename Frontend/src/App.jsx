@@ -1,8 +1,9 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import Homepage from "./features/HomePage";
+import Homepage from "./features/homePage/HomePage";
 import Registration from "./features/auth/Registration";
 import Login from "./features/auth/Login";
-import Header from "./components/Header";
+import Header from "./components/header/Header";
+import "./App.css";
 
 function App() {
 

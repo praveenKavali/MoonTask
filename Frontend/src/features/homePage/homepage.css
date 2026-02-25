@@ -1,0 +1,42 @@
+homepage-container {
+    min-width: 100vh;
+}
+
+a {
+    font-size: 3em;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 1em;
+    border-radius: 30px;
+    background-color: var(--secondary-base);
+}
+
+a:hover, a:active {
+    background-color: var(--secondary-tint2);
+}
+
+.main-heading {
+    text-align: center;
+    margin: 100px;
+}
+
+p {
+    font-size: 24px;
+    text-align: center;
+}
+
+.link-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h1 {
+    padding-top: 25px;
+    margin-bottom: 50px;
+}
+
+button {
+    cursor: pointer;
+}

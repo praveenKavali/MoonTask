@@ -1,4 +1,5 @@
-import AuthHandler from "../../services/Post";
+import AuthHandler from "../../components/AuthHandler";
+
 
 export default function Registration() {
     return (
