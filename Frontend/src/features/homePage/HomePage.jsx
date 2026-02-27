@@ -1,19 +1,19 @@
 import { Link } from "react-router-dom";
 import Header from "../../components/header/Header";
-import "./homePage.css";
+import styles from "./homepage.module.css";
 
 export default function Homepage() {
     return (
-        <div className="homepage-container">
+        <>
             <Header />
-            <>
-                <h1 className="main-heading">Welcome to Moon Task</h1>
-                <p> <span>Moon Task</span> is a task manager application. Where you can store your task.</p>
-                <div className="link-container">
+            <div className={styles['homepage-container']}>
+                <h1 className={styles['main-heading']}>Welcome to Moon Task.</h1>
+                <p>A simple task manager application for task management. Your all in one platform to organise work, projects and goal with ease.Set priority and track progress.</p>
+                <div className={styles['link-container']}>
                     <Link to="/register">Registration</Link><br />
                     <Link to="/login">Login</Link>
                 </div>
-            </>
-        </div>
+            </div>
+        </>
     )
 }

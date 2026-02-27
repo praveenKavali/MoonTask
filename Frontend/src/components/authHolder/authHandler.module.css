@@ -1,0 +1,7 @@
+.message {
+    font-size: var(--text-pera);
+    color: var(--third-base);
+    padding: 0.5rem;
+    border: 0.3rem solid var(--third-tint);
+    margin: 20% auto;
+}

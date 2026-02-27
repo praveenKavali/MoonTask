@@ -1,4 +1,4 @@
-import "./Button.css"
+import "./Button.module.css"
 
 /**
  * Creating a button component for using it in various places.

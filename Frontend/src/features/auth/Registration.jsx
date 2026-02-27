@@ -1,5 +1,4 @@
-import AuthHandler from "../../components/AuthHandler";
-
+import AuthHandler from "../../components/authHolder/AuthHandler";
 
 export default function Registration() {
     return (

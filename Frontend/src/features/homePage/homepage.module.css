@@ -1,0 +1,43 @@
+.homepage-container {
+    border: 0.2rem solid var(--secondary-tint);
+}
+
+.link-container {
+    margin: 0 25%;
+    padding: 5%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.link-container a {
+    font-size: 2em;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5em 1em;
+    margin: 0.5em;
+    border-radius: 30px;
+    background-color: var(--secondary-base);
+}
+
+a:hover, a:active {
+    background-color: var(--secondary-tint);
+}
+
+.main-heading {
+    font-size: var(--text-h1);
+    text-align: center;
+    margin: 50px;
+    padding-top: 2.5rem;
+    margin-bottom: 5rem;
+}
+
+.homepage-container p {
+    font-size: var(--text-pera);
+    text-align: start;
+}
+
+
+button {
+    cursor: pointer;
+}

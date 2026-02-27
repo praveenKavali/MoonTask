@@ -1,0 +1,16 @@
+.headerContainer{
+    border: 0.2rem solid var(--primary-base);
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+}
+
+.headerContainer h1 {
+    padding-left: 2rem;
+    margin: 1rem;
+    font-size: 3rem;
+    text-align: start;
+}
+
+.headerContainer span {
+    color: var(--primary-shade);
+}

@@ -1,4 +1,4 @@
-import "./label.css";
+import "./label.module.css";
 /**
  * Creating a label component.
  * @param id - used to connect with input

@@ -1,7 +1,8 @@
 import { useState } from "react";
 import Field from "../Field";
 import Button from "../Button/Button";
-import "./form.css";
+import styles from "./form.module.css";
+import Header from "../../header/Header";
 
 /**
  * Creating a Form component using {@link Field} component.
@@ -21,45 +22,48 @@ export default function Form({ type, onSubmit }) {
         setFormData({ ...formData, [e.target.id]: e.target.value });
     }
     return (
-        <div className="form-container">
-            <form onSubmit={onSubmit}>
-                <h1>{isRegister ? 'Register' : 'Login'}</h1>
-                <div className="field-container">
-                    {isRegister &&
+        <>
+            <Header />
+            <div className={styles.formContainer}>
+                <form onSubmit={onSubmit}>
+                    <h1>{isRegister ? 'Register' : 'Login'}</h1>
+                    <div className={styles.fieldContainer}>
+                        {isRegister &&
+                            <Field
+                                id="name"
+                                label="name:"
+                                name="name"
+                                value={formData.name}
+                                handleChange={handleChange}
+                                placeholder="Enter user name"
+                            />
+                        }
                         <Field
-                            id="name"
-                            label="name:"
-                            name="name"
-                            value={formData.name}
+                            id="email"
+                            label="Email:"
+                            name="email"
+                            type="email"
+                            value={formData.email}
                             handleChange={handleChange}
-                            placeholder="Enter user name"
+                            placeholder="e.g praveen@gmail.com"
                         />
-                    }
-                    <Field
-                        id="email"
-                        label="Email:"
-                        name="email"
-                        type="email"
-                        value={formData.email}
-                        handleChange={handleChange}
-                        placeholder="e.g praveen@gmail.com"
+                        <Field
+                            id="password"
+                            label="Password:"
+                            name="password"
+                            type="password"
+                            value={formData.password}
+                            handleChange={handleChange}
+                            placeholder="Enter password"
+                            minLength="8"
+                        />
+                    </div>
+                    <Button
+                        type="submit"
+                        name={isRegister ? 'Register' : 'Login'}
                     />
-                    <Field
-                        id="password"
-                        label="Password:"
-                        name="password"
-                        type="password"
-                        value={formData.password}
-                        handleChange={handleChange}
-                        placeholder="Enter password"
-                        minLength="8"
-                    />
-                </div>
-                <Button
-                    type="submit"
-                    name={isRegister ? 'Register' : 'Login'}
-                />
-            </form>
-        </div>
+                </form>
+            </div>
+        </>
     )
 }

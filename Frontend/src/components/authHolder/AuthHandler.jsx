@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import api from "../services/js.files/Fetcher";
-import Form from "./common/form/Form";
+import api from "../../services/js.files/Fetcher";
+import Form from "../common/form/Form";
+import styles from "./authHandler.module.css";
 
 export default function AuthHandler({ type }) {
     const isRegister = type === "register";
@@ -34,8 +35,12 @@ export default function AuthHandler({ type }) {
     }
     return (
         <>
-            {msg && <div>{msg}</div>}
-            <Form type={type} onSubmitAction={handleSubmit} />
+            {msg ? (
+                <div className={styles.message}>{msg}</div>
+            ) : (
+                <Form type={type} onSubmit={handleSubmit} />
+            )
+            }
         </>
     )
 }

@@ -1,4 +1,4 @@
-import "./input.css"
+import styles from "./input.module.css"
 /**
  * Creating an input component for taking input from user.
  * @param id - an id for connecting with label.
@@ -12,7 +12,7 @@ import "./input.css"
  */
 export default function Input({ id, type, name, value, onChange, placeholder, minLength }) {
     return (
-        <input
+        <input className={styles.inputField}
             id={id}
             type={type}
             name={name}

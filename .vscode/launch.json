@@ -4,19 +4,25 @@
     // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
+    {
+        "name": "Attach by com.sun.jdi.SharedMemoryListen",
+        "type": "jdk",
+        "request": "attach",
+        "listen": "true"
+    },
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}"
+        },
         {
             "type": "java",
             "name": "BackendApplication",
             "request": "launch",
             "mainClass": "com.MoonTask.Backend.BackendApplication",
-            "projectName": "Backend"
-        },
-        {
-            "type": "msedge",
-            "request": "launch",
-            "name": "Launch Edge against localhost",
-            "url": "http://localhost:5173",
-            "webRoot": "${workspaceFolder}"
+            "projectName": "Backend",
+            "vmArgs": "-Duser.timezone=Asia/Kolkata"
         }
     ]
 }
