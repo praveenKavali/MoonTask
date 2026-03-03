@@ -1,6 +1,8 @@
 package com.MoonTask.Backend.user.entity;
 
+import com.MoonTask.Backend.task.entity.TaskInfo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,6 +12,7 @@ import org.jspecify.annotations.Nullable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -31,10 +34,27 @@ public class UserInfo implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    @Column(nullable = false)
     private String name;
+    // email should be unique, it should not be null, and it should not be updated because it is used as username for login.
     @Column(unique = true, nullable = false, updatable = false)
     private String email;
+    // password should not be null, and it should have minimum 8 characters for security purpose.
+    @Column(nullable = false)
+    @Size(min = 8)
     private String password;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TaskInfo> tasks;
+
+    /**
+     * This method is user full to assign task to user.
+     * @param task contains the task information*/
+    public void addTask(TaskInfo task){
+        this.tasks  = new ArrayList<>();
+        this.tasks.add(task);
+        task.setUser(this);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();

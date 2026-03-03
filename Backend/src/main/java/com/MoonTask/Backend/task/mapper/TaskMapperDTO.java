@@ -4,8 +4,10 @@ import com.MoonTask.Backend.task.dto.CreateTask;
 import com.MoonTask.Backend.task.entity.TaskInfo;
 import org.springframework.stereotype.Component;
 
+/**
+ * A mapper class convert {@link CreateTask} to {@link TaskInfo}*/
 @Component
-public class MapperDTO {
+public class TaskMapperDTO {
 
     /**
      * This method transform user entered details into to {@link TaskInfo}

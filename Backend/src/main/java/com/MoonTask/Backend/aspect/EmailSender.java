@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Aspect
 @Component
-public class MailSender {
+public class EmailSender {
     //takes the sender mail from the application properties file
     @Value("spring.mail.username")
     private String sender;
@@ -24,12 +24,12 @@ public class MailSender {
      * <p>
      *     When the user is registered successfully this method will be called and send mail to the user.
      * </p>
-     * @param user contains the mail details*/
-    @After("execution(* com.MoonTask.Backend.user.service.UserService.register(..)) && args(user)")
-    public void sendMail(CreateUserDTO user) {
+     * @param createUser contains the mail details*/
+    @After("execution(* com.MoonTask.Backend.user.service.UserService.create(..)) && args(createUser)")
+    public void sendMail(CreateUserDTO createUser) {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setFrom(sender);
-        message.setTo(user.getEmail());
+        message.setTo(createUser.getEmail());
         message.setSubject("Welcome to moon task");
         message.setText("Moon task is a task managing application. Used to store your tasks.");
         try {

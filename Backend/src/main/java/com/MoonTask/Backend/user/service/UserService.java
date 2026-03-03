@@ -4,6 +4,7 @@ import com.MoonTask.Backend.security.exception.UserException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.MoonTask.Backend.user.mapper.MapperDTO;
@@ -59,7 +60,7 @@ public class UserService implements CrudService<CreateUserDTO, UpdateUserDTO> {
             throw new UserException("An user account present with " + createUser.getEmail() + ". Please use anther one.");
         }
         UserInfo userInfo = mapper.createToUserInfo(createUser);
-        userInfo.setPassword(encoder.encode(userInfo.getPassword()));
+        userInfo.setPassword(encoder.encode(createUser.getPassword()));
         repo.save(userInfo);
         return "Account created successfully. Welcome, " + userInfo.getName() + "!";
     }
@@ -116,5 +117,13 @@ public class UserService implements CrudService<CreateUserDTO, UpdateUserDTO> {
             throw new UserException("Something went wrong. Please check your email and password.");
         }
         return jwtService.generateToken(email);
+    }
+
+    public String username(UserDetails user) {
+        Optional<UserInfo> userInfo = repo.findByEmail(user.getUsername());
+        if(userInfo.isEmpty()) {
+            throw new UserException("No username present");
+        }
+        return userInfo.get().getName();
     }
 }

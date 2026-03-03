@@ -66,12 +66,10 @@ public class JwtFilter extends OncePerRequestFilter {
         if (header != null && header.startsWith("Bearer ")) {
             token = header.substring(7);
             email = jwtService.extractEmail(token);
-            System.out.println("DEBUG: Extracted email: " + email);
         }
 
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails user = service.loadUserByUsername(email);
-            System.out.println("Debug: user details found in bd: " + user.getUsername());
 
             if (jwtService.validateToken(email, user, token)) {
                 UsernamePasswordAuthenticationToken authToken = new

@@ -1,16 +1,11 @@
-package com.MoonTask.Backend.user;
+package com.MoonTask.Backend.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.MoonTask.Backend.user.dto.CreateUserDTO;
 import com.MoonTask.Backend.user.dto.LoginDTO;
@@ -19,6 +14,10 @@ import com.MoonTask.Backend.user.service.UserService;
 
 import jakarta.validation.Valid;
 
+/**
+ * A Rest Controller class for managing user profile and authentication.
+ * Provides endpoints for register, login, update and delete.
+ * @see UserService*/
 @RestController
 @CrossOrigin(origins="http://localhost:5173")
 public class UserController {
@@ -32,7 +31,7 @@ public class UserController {
      * @return response with success message and HTTP 200.
      * @throws jakarta.validation.ValidationException if form data is invalid.*/
     @PostMapping("/register")
-    public ResponseEntity<String> create(@Valid @RequestBody CreateUserDTO userDTO){
+    public ResponseEntity<String> registerUser(@Valid @RequestBody CreateUserDTO userDTO){
         return ResponseEntity.status(HttpStatus.CREATED).body(service.create(userDTO));
     }
 
@@ -56,7 +55,7 @@ public class UserController {
      * @return String message if user details is updated.*/
     @PutMapping("/update")
     public ResponseEntity<String> update(@AuthenticationPrincipal UserDetails user,
-                                         @RequestBody UpdateUserDTO userDTO
+                                         @Valid @RequestBody UpdateUserDTO userDTO
     ){
         return ResponseEntity.ok(service.update(user.getUsername(), userDTO));
     }
@@ -68,7 +67,11 @@ public class UserController {
      * @return String message if user is deleted successfully deleted.*/
     @DeleteMapping("/delete")
     public ResponseEntity<String> delete(@AuthenticationPrincipal UserDetails user){
-        System.out.println("Debug: email in controller class: " + user.getUsername());
         return ResponseEntity.ok(service.delete(user.getUsername()));
+    }
+
+    @GetMapping("/username")
+    public ResponseEntity<String> getUsername(@AuthenticationPrincipal UserDetails user) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.username(user));
     }
 }

@@ -1,4 +1,124 @@
 package com.MoonTask.Backend.task.service;
 
+import com.MoonTask.Backend.task.dto.CreateTask;
+import com.MoonTask.Backend.task.entity.Priority;
+import com.MoonTask.Backend.task.entity.Status;
+import com.MoonTask.Backend.task.entity.TaskInfo;
+import com.MoonTask.Backend.task.mapper.TaskMapperDTO;
+import com.MoonTask.Backend.task.repository.TaskRepository;
+import com.MoonTask.Backend.user.entity.UserInfo;
+import com.MoonTask.Backend.user.repository.UserRepo;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.List;
+
+/**
+ * Service class contains the business logic related to {@link TaskInfo}*/
+@Service
 public class TaskService {
+
+    private TaskRepository repository;
+    private TaskMapperDTO mapper;
+    private UserRepo repo;
+
+    public TaskService(TaskRepository repository,
+                       TaskMapperDTO mapper,
+                       UserRepo repo){
+        this.repository = repository;
+        this.mapper = mapper;
+        this.repo = repo;
+    }
+
+    /**
+     * This method is useful to get all the task from database.
+     * @return a list of {@link TaskInfo} task.*/
+    public List<TaskInfo> allTasks(){
+        return repository.getAllTask();
+    }
+
+    /**
+     * This method is useful to get all tasks based on {@link Priority}
+     * @param priority useful for filtering data
+     * @return a list of {@link TaskInfo} task.*/
+    public List<TaskInfo> getTasksByPriority(Priority priority){
+        return repository.findByPriority(priority);
+    }
+
+    /**
+     * This method is useful to get all tasks based on {@link Status}
+     * @param status useful for filtering data
+     * @return a list of {@link TaskInfo} task.*/
+    public List<TaskInfo> getTasksByStatus(Status status){
+        return repository.findByStatus(status);
+    }
+
+    /**
+     * This method is useful for searching for specific task with few letters(you don't need to remember the entire task name)
+     * @param word contains the letters fot searching through the database.
+     * @return a list of all task that matches the entered word.*/
+    public List<TaskInfo> searchTask(String word){
+        return repository.searchForTask(word);
+    }
+
+    /**
+     * This method is used to store a task to the database.
+     * @param userDetails {@link UserDetails} when login security save the details. which will be helpful for mapping this task to specific user.
+     * @param task container the user enter details about task.
+     * @return a string message if task has been added successfully.
+     * @throws UsernameNotFoundException if the user details are not present in database.*/
+    public String addTask(UserDetails userDetails, CreateTask task){
+        UserInfo user = repo.findByEmail(userDetails.getUsername()).orElseThrow(
+                () -> new UsernameNotFoundException("Please login to save a task."));
+        TaskInfo taskInfo = mapper.mappedToTask(task);
+        user.addTask(taskInfo);
+        repo.save(user);
+        return "Task has been added.";
+    }
+
+    /**
+     * This method used to update the priority of the task
+     * @param priority new priority
+     * @param id which task need to be updated determined by id
+     * @return a message if task is updated successfully
+     * @throws UsernameNotFoundException if no task is presented with id.*/
+    public String updatePriority(Priority priority, Integer id){
+        TaskInfo task = repository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("no task is present")
+        );
+        repository.updatePriority(priority, id);
+        return "Priority has been updated from " + task.getPriority() + " to " + priority + ".";
+    }
+
+    /**
+     * This method is used for updating the status of the task.
+     * @param status new status
+     * @param id which task need to be updated determined by id
+     * @return a message if task is successfully updated.*/
+    public String updateStatus(Status status, Integer id){
+        TaskInfo task = repository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("no task is present")
+        );
+        repository.updateStatus(status, id);
+        return "Status has been updated from " + task.getStatus() + " to " + status + ".";
+    }
+
+    /**
+     * This method is useful for updating the completed time and date.
+     * @param id for finding task to update time and task
+     * @return a String if task is completed
+     * @throws UsernameNotFoundException if no task present with given id.*/
+    public String markAsComplete(Integer id){
+        TaskInfo task = repository.findById(id).orElseThrow(
+                () -> new UsernameNotFoundException("No Task present"));
+        task.setCompletedTime(LocalTime.now());
+        task.setCompletedDate(LocalDate.now());
+        task.setStatus(Status.COMPLETED);
+        repository.save(task);
+        return "Congratulations! on completing task.";
+    }
+
 }
