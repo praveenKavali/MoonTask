@@ -1,9 +1,0 @@
-
-.inputField{
-    text-align: center;
-    border-radius: 5px;
-    padding: var(--text-md);
-    margin: 1rem;
-    border: 0.2rem solid var(--third-tint);
-    border-radius: 1rem;
-}
