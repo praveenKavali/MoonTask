@@ -18,6 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.test.context.support.WithMockUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -51,47 +52,51 @@ class TaskServiceTest {
 
     @Test
     @DisplayName("Test for allTask method")
+    @WithMockUser(username = "test@user")
     void allTask() {
-        when(repo.getAllTask()).thenReturn(List.of(task));
+        when(repo.getAllTask("test@user")).thenReturn(List.of(task));
 
-        List<TaskInfo> tasks = service.allTasks();
+        List<TaskInfo> tasks = service.allTasks("test@user");
         assertNotNull(tasks);
         assertEquals(1, tasks.size());
 
-        verify(repo).getAllTask();
+        verify(repo).getAllTask("test@user");
     }
 
     @Test
     @DisplayName("Test for getTasksByPriority method")
+    @WithMockUser(username = "mock@user")
     void getTasksByPriority() {
-        when(repo.findByPriority(any(Priority.class))).thenReturn(List.of(task));
+        when(repo.findByUserEmailAndPriority(anyString(), any(Priority.class))).thenReturn(List.of(task));
 
-        List<TaskInfo> tasks = service.getTasksByPriority(Priority.LOW);
+        List<TaskInfo> tasks = service.getTasksByPriority("mock@user", Priority.LOW);
         assertNotNull(tasks);
         assertEquals(task.getPriority(), tasks.get(0).getPriority());
-        verify(repo).findByPriority(any(Priority.class));
+        verify(repo).findByUserEmailAndPriority(anyString(),any(Priority.class));
     }
 
     @Test
     @DisplayName("Test for getTasksByStatus method")
+    @WithMockUser(username = "mock@user")
     void getTasksByStatus() {
-        when(repo.findByStatus(any(Status.class))).thenReturn(List.of(task));
+        when(repo.findByUserEmailAndStatus(anyString(), any(Status.class))).thenReturn(List.of(task));
 
-        List<TaskInfo> tasks = service.getTasksByStatus(Status.DO);
+        List<TaskInfo> tasks = service.getTasksByStatus("mock@user", Status.DO);
         assertNotNull(tasks);
         assertEquals(task.getStatus(), tasks.get(0).getStatus());
-        verify(repo).findByStatus(any(Status.class));
+        verify(repo).findByUserEmailAndStatus(anyString(), any(Status.class));
     }
 
     @Test
     @DisplayName("Test for searchTask method")
+    @WithMockUser(username = "user@gmail.com")
     void searchTask() {
-        when(repo.searchForTask(anyString())).thenReturn(List.of(task));
+        when(repo.searchForTask(anyString(), anyString())).thenReturn(List.of(task));
 
-        List<TaskInfo> tasks = service.searchTask("play");
+        List<TaskInfo> tasks = service.searchTask("user@gmail.com", "play");
         assertNotNull(tasks);
         assertEquals(task.getName(), tasks.get(0).getName());
-        verify(repo).searchForTask(anyString());
+        verify(repo).searchForTask(anyString(), anyString());
     }
 
     @Nested

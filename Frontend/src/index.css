@@ -1,0 +1,51 @@
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --button-size: 1.5rem;
+}
+
+body {
+    width: 80vw;
+    margin: 0 auto;
+    font-size: 63.5%;
+}
+
+@media (max-width: 1000px) {
+  body {
+    font-size: 50%;
+  }
+  :root {
+    --button-size:1.1rem;
+  }
+}
+
+@media (max-width: 500px) {
+  body {
+    font-size: 37.5%;
+  }
+
+  :root {
+    --button-size:0.7rem;
+  }
+
+}
+
+@media (max-width: 400px) {
+  body {
+    font-size: 31.25%;
+  }
+  :root {
+    --button-size:0.5rem;
+  }
+}

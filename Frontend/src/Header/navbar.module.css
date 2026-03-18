@@ -1,0 +1,23 @@
+.nav {
+    border-bottom: 5px solid white;
+    margin-bottom: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav > h1 {
+    margin: 10px 0;
+}
+
+.firstLetter {
+    height: 40px;
+    width: 40px;
+    margin-right: 40px;
+    border-radius: 50%;
+    background-color: aquamarine;
+    text-align: center;
+    color: blueviolet;
+    font-weight: 700;
+    font-size: 25px;
+}

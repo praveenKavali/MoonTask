@@ -19,27 +19,42 @@ import java.util.List;
 public interface TaskRepository extends JpaRepository<TaskInfo, Integer> {
 
     //This method is used to find the all task in descending order
-    @Query(value = "SELECT * FROM Task_Information ORDER BY Id DESC", nativeQuery = true)
-    List<TaskInfo> getAllTask();
-    
+    @Query(value = "SELECT t.* " +
+            "FROM \"task_information\" t " +
+            "INNER JOIN \"user_details\" u " +
+            "ON t.user_id = u.id " +
+            "WHERE u.email = :email " +
+            "ORDER BY t.id DESC", nativeQuery = true)
+    List<TaskInfo> getAllTask(@Param("email") String email);
+
+
+
     /**
      * This method is useful for finding the list of tasks based on priority.
+     * @param email used for finding specific userdata
      * @param priority {@link Priority} used to filter the task.
      * @return list of tasks after being filtered.*/
-    List<TaskInfo> findByPriority(Priority priority);
+    List<TaskInfo> findByUserEmailAndPriority(String email, Priority priority);
 
     /**
      * This method is useful for finding the list of tasks based on status.
+     * @param email used for finding specific userdata
      * @param status {@link Status} used to filter the task.
      * @return list of tasks after being filtered.*/
-    List<TaskInfo> findByStatus(Status status);
+    List<TaskInfo> findByUserEmailAndStatus(String email, Status status);
 
     /**
      * This method is useful for searching the task based on the words
      * @param  word a string letter or word useful for searching through database.
      * @return a list of tasks that are start with words.*/
-    @Query(value = "SELECT * FROM Task_Information WHERE name LIKE CONCAT('%', :word, '%')", nativeQuery = true)
-    List<TaskInfo> searchForTask(@Param("word") String word);
+    @Query(value = "SELECT t.* " +
+            "FROM \"task_information\" t " +
+            "INNER JOIN \"user_details\" u " +
+            "ON t.user_id = u.id " +
+            "WHERE u.email = :email AND t.name LIKE CONCAT('%', :word, '%') " +
+            "ORDER BY t.id DESC", nativeQuery = true)
+    List<TaskInfo> searchForTask(@Param("email") String email,
+                                 @Param("word") String word);
 
     /**
      * This method is useful for changing priority of the task.

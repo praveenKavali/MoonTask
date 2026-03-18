@@ -1,0 +1,19 @@
+.formContainer {
+    width: 60%;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    text-transform: capitalize;
+    margin: 10px auto;
+}
+
+.formContainer > label {
+    text-align: start;
+    font-size: 1rem
+}
+
+.formContainer > input {
+    border: 2px solid black;
+    border-radius: 5px;
+    text-align: center;
+}

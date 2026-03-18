@@ -1,0 +1,14 @@
+.dropdown {
+    text-transform: capitalize;
+    width: 60%;
+    margin: 10px auto;
+    text-align: center;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.dropdown > label {
+    margin-left: -10px;
+    font-size: 1rem
+}

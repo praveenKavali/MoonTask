@@ -41,7 +41,7 @@ public class TaskInfo {
     private LocalDate completedDate;
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnore
-    @JoinColumn(name = "user_id", nullable = true)
+    @JoinColumn(nullable = true)
     private UserInfo user;
 
     /**

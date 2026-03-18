@@ -5,7 +5,7 @@
 ## 🚀 Tech Stack
 - Backend: Spring Boot, JPA/Hibernate, REST APIs
 - Database: MySQL/PostgreSQL
-- Frontend (planned): React
+- Frontend: React
 
 ## ✅ Completed Features
 - User login with name, email, and password
@@ -15,9 +15,6 @@
 - Design related to task management in spring boot.
 - Filtering tasks by status, priority, etc.
 - JUnit and Mockito for testing in backend.
-
-## 🔜 What's Next
-- React frontend for user interface
 
 ## 📸 Screenshots
 ![registration](screenshots/registration.png)

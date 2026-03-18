@@ -57,49 +57,53 @@ class TaskControllerTest {
 
     @Test
     @DisplayName("Test for getAllTask method")
+    @WithMockUser(username = "test@gmail.com")
     void getAllTask() throws Exception {
-        when(service.allTasks()).thenReturn(List.of(task));
+        when(service.allTasks("test@gmail.com")).thenReturn(List.of(task));
         mockMvc.perform(get("/task/all"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].name").value("have to play games at evening."));
-        verify(service).allTasks();
+        verify(service).allTasks("test@gmail.com");
     }
 
     @Test
     @DisplayName("Test for filterByPriority method")
+    @WithMockUser(username = "test@gmail.com")
     void filterByPriority() throws Exception {
-        when(service.getTasksByPriority(Priority.LOW)).thenReturn(List.of(task));
+        when(service.getTasksByPriority(eq("test@gmail.com"), eq(Priority.LOW))).thenReturn(List.of(task));
         mockMvc.perform(get("/task/priority")
                         .param("priority", "LOW"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].priority").value("LOW"));
-        verify(service).getTasksByPriority(eq(Priority.LOW));
+        verify(service).getTasksByPriority(eq("test@gmail.com"),eq(Priority.LOW));
     }
 
     @Test
     @DisplayName("Test for filterByStatus method")
+    @WithMockUser(username = "test@gmail.com")
     void filterByStatus() throws Exception {
-        when(service.getTasksByStatus(Status.DO)).thenReturn(List.of(task));
+        when(service.getTasksByStatus(eq("test@gmail.com"), eq(Status.DO))).thenReturn(List.of(task));
         mockMvc.perform(get("/task/status")
                         .param("status", "DO"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].status").value("DO"));
-        verify(service).getTasksByStatus(eq(Status.DO));
+        verify(service).getTasksByStatus(eq("test@gmail.com"), eq(Status.DO));
     }
 
     @Test
     @DisplayName("Test for searchForTask method")
+    @WithMockUser(username = "test@gmail.com", value = "test@gmail.com")
     void searchForTask() throws Exception {
-        when(service.searchTask(anyString())).thenReturn(List.of(task));
+        when(service.searchTask(eq("test@gmail.com"), anyString())).thenReturn(List.of(task));
         mockMvc.perform(get("/task/search")
                         .param("word", "play"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isArray())
                 .andExpect(jsonPath("$[0].name").value("have to play games at evening."));
-        verify(service).searchTask(anyString());
+        verify(service).searchTask(eq("test@gmail.com"), anyString());
     }
 
     @Nested

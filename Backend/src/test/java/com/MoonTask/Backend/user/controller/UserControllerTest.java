@@ -169,7 +169,7 @@ class UserControllerTest {
     void getUsername() throws Exception {
         when(service.username(any())).thenReturn("praveen");
         mockMvc.perform(get("/username"))
-                .andExpect(status().isFound())
+                .andExpect(status().isOk())
                 .andExpect(content().string("praveen"));
         verify(service).username(any());
     }

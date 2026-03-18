@@ -1,0 +1,30 @@
+.task-container {
+    margin-top: 20px;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    background-color: white;
+    color: black;
+    text-transform: capitalize;
+    font-size: 1rem;
+}
+
+.task-container > div {
+    border: 5px solid black;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.task-container > div > h3 {
+    border-bottom: 2px solid wheat;
+}
+
+.task-items > li, .task-items > p{
+    display: grid;
+    grid-template-columns: repeat(2, 2fr);
+    gap: 20px;
+    justify-items: start;
+    align-items: start;
+    padding: 0 50px;
+}

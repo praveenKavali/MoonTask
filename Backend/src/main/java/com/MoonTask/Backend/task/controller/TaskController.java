@@ -19,6 +19,7 @@ import java.util.List;
  * Rest Controller class for managing tasks
  * provide points like all, priority, status, search, create, completed etc.*/
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/task")
 public class TaskController {
 
@@ -29,8 +30,8 @@ public class TaskController {
      * Retries all the tasks from dataset
      * @return ResponseEntity contains the list of task.*/
     @GetMapping("/all")
-    public ResponseEntity<List<TaskInfo>> getAllTask(){
-        return ResponseEntity.ok(service.allTasks());
+    public ResponseEntity<List<TaskInfo>> getAllTask(@AuthenticationPrincipal UserDetails userDetails){
+        return ResponseEntity.ok(service.allTasks(userDetails.getUsername()));
     }
 
     /**
@@ -39,8 +40,9 @@ public class TaskController {
      * @param priority used for filtering data.
      * @return a list of filtered task.*/
     @GetMapping("/priority")
-    public ResponseEntity<List<TaskInfo>> filterByPriority(@RequestParam("priority") Priority priority){
-        return ResponseEntity.ok(service.getTasksByPriority(priority));
+    public ResponseEntity<List<TaskInfo>> filterByPriority(@AuthenticationPrincipal UserDetails userDetails,
+                                                           @RequestParam("priority") Priority priority){
+        return ResponseEntity.ok(service.getTasksByPriority(userDetails.getUsername(), priority));
     }
 
     /**
@@ -49,8 +51,10 @@ public class TaskController {
      * @param status used for filtering data.
      * @return a list of filtered task.*/
     @GetMapping("/status")
-    public ResponseEntity<List<TaskInfo>> filterByStatus(@RequestParam("status") Status status){
-        return ResponseEntity.ok(service.getTasksByStatus(status));
+    public ResponseEntity<List<TaskInfo>> filterByStatus(@AuthenticationPrincipal UserDetails userDetails,
+                                                         @RequestParam("status") Status status){
+        System.out.println("Status from front end : " + status);
+        return ResponseEntity.ok(service.getTasksByStatus(userDetails.getUsername(), status));
     }
 
     /**
@@ -59,14 +63,15 @@ public class TaskController {
      * @param word used for filtering data.
      * @return a list of filtered task.*/
     @GetMapping("/search")
-    public ResponseEntity<List<TaskInfo>> searchForTask(@RequestParam("word") String word){
-        return ResponseEntity.ok(service.searchTask(word));
+    public ResponseEntity<List<TaskInfo>> searchForTask(@AuthenticationPrincipal UserDetails userDetails,
+                                                        @RequestParam("word") String word){
+        return ResponseEntity.ok(service.searchTask(userDetails.getUsername(), word));
     }
 
     /**
      * used for creating the task and assign to the user.
      * Uses POST mapping
-     * @param userDetails spring security provides the user details of the currently logged in user through {@link AuthenticationPrincipal}.
+     * @param userDetails spring security provides the user details of the currently logged-in user through {@link AuthenticationPrincipal}.
      * @param task contains the information about the task from the frontend.
      * @return a message if task is successfully created.*/
     @PostMapping("/create")

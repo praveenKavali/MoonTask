@@ -36,32 +36,34 @@ public class TaskService {
     /**
      * This method is useful to get all the task from database.
      * @return a list of {@link TaskInfo} task.*/
-    public List<TaskInfo> allTasks(){
-        return repository.getAllTask();
+    public List<TaskInfo> allTasks(String email){
+        return repository.getAllTask(email);
     }
 
     /**
      * This method is useful to get all tasks based on {@link Priority}
      * @param priority useful for filtering data
+     * @param email for finding particular user
      * @return a list of {@link TaskInfo} task.*/
-    public List<TaskInfo> getTasksByPriority(Priority priority){
-        return repository.findByPriority(priority);
+    public List<TaskInfo> getTasksByPriority(String email, Priority priority){
+        return repository.findByUserEmailAndPriority(email, priority);
     }
 
     /**
      * This method is useful to get all tasks based on {@link Status}
+     * @param email used to find user details
      * @param status useful for filtering data
      * @return a list of {@link TaskInfo} task.*/
-    public List<TaskInfo> getTasksByStatus(Status status){
-        return repository.findByStatus(status);
+    public List<TaskInfo> getTasksByStatus(String email, Status status){
+        return repository.findByUserEmailAndStatus(email, status);
     }
 
     /**
      * This method is useful for searching for specific task with few letters(you don't need to remember the entire task name)
      * @param word contains the letters fot searching through the database.
      * @return a list of all task that matches the entered word.*/
-    public List<TaskInfo> searchTask(String word){
-        return repository.searchForTask(word);
+    public List<TaskInfo> searchTask(String email, String word){
+        return repository.searchForTask(email, word);
     }
 
     /**

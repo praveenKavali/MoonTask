@@ -3,7 +3,7 @@ package com.MoonTask.Backend.task.dto;
 
 import com.MoonTask.Backend.task.entity.Priority;
 import com.MoonTask.Backend.task.entity.Status;
-import jakarta.persistence.Entity;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

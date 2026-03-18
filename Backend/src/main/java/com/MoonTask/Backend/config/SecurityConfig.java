@@ -16,8 +16,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import com.MoonTask.Backend.security.jwt.JwtFilter;
 import com.MoonTask.Backend.security.service.CustomUserDetailsService;
 import com.MoonTask.Backend.user.service.UserService;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.naming.AuthenticationException;
+import java.util.List;
 
 /**
  * A configuration class for creating various beans.
@@ -46,6 +50,7 @@ public class SecurityConfig {
      *     <h4>Responsibilities:</h4>
      *     <li>1.Disables csrf</li>
      *     <li>2.permit access to some endpoints and others must pass through filter chain</li>
+     *     <li>3.Insert {@link CorsConfigurationSource} bean into filter Chain.</li>
      *     <li>3.creates a stateless session policy.</li>
      *     <li>4.add a {@link JwtFilter} filter chain before {@link UsernamePasswordAuthenticationFilter}.</li>
      * </p>
@@ -53,7 +58,8 @@ public class SecurityConfig {
      * @return {@link SecurityFilterChain}*/
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception{
-        return httpSecurity.csrf(csrf -> csrf.disable())
+        return httpSecurity.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth ->
                         auth.requestMatchers("/", "/register", "/login").permitAll()
                                 .anyRequest().authenticated())
@@ -61,6 +67,27 @@ public class SecurityConfig {
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
+
+    /**
+     * This bean tells which frontend application are allowed to talk to backend(server).
+     * This method provide {@link  CorsConfigurationSource} bean.
+     * <p>
+     *     Here we set which frontend server are allowed to connect with backend(react), which methods are allowed(CRUD)
+     *     tells which type of metadata can be sent(HTTP header).
+     * </p>*/
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(List.of("http://localhost:5173")); //allowing React to connect with spring
+        configuration.setAllowedMethods(List.of("GET","POST","PUT","DELETE","PATCH","OPTIONS")); // Allowing this methods
+        configuration.setAllowedHeaders(List.of("*")); // allowing HTTP headers
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration); //applies these for every single url
+        return source;
+    }
+
 
     @Bean
     public BCryptPasswordEncoder encoder(){

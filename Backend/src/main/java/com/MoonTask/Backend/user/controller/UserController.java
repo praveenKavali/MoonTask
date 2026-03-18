@@ -19,7 +19,6 @@ import jakarta.validation.Valid;
  * Provides endpoints for register, login, update and delete.
  * @see UserService*/
 @RestController
-@CrossOrigin(origins="http://localhost:5173")
 public class UserController {
 
     @Autowired
@@ -72,6 +71,6 @@ public class UserController {
 
     @GetMapping("/username")
     public ResponseEntity<String> getUsername(@AuthenticationPrincipal UserDetails user) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.username(user));
+        return ResponseEntity.ok(service.username(user));
     }
 }
