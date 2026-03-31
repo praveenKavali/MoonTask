@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.ImportAutoConfiguration;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
@@ -164,7 +165,7 @@ class TaskControllerTest {
     @Test
     @DisplayName("Test for taskCompleted method")
     void taskCompleted() throws Exception {
-        when(service.markAsComplete(anyInt())).thenReturn("Congratulation on completed task.");
+        when(service.markAsComplete(anyInt())).thenReturn(new TaskInfo());
         mockMvc.perform(patch("/task/complete/{id}", 1))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Congratulation on completed task."));

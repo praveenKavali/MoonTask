@@ -15,6 +15,8 @@
 - Design related to task management in spring boot.
 - Filtering tasks by status, priority, etc.
 - JUnit and Mockito for testing in backend.
+- Used redis for caching purpose.
+- Create a docker image out of the backend code.
 
 ## 📸 Screenshots
 ![registration](screenshots/registration.png)

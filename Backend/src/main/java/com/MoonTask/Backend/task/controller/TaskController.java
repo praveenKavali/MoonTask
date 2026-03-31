@@ -110,7 +110,8 @@ public class TaskController {
      * @return a message if it is completed successfully.*/
     @PatchMapping("/complete/{id}")
     public ResponseEntity<String> taskCompleted(@PathVariable Integer id){
-        return ResponseEntity.ok(service.markAsComplete(id));
+        service.markAsComplete(id);
+        return ResponseEntity.ok("Congratulations! on completing task.");
     }
 }
 

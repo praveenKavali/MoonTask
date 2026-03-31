@@ -7,14 +7,14 @@ import { useLocation, useNavigate } from "react-router-dom";
 export default function UpdatePriority() {
     const location = useLocation();
     const TaskId = location.state?.TaskId;
-    const newPriority = location.state?.priority;
+    const currentPriority = location.state?.priority;
     const PRIORITY_OPTIONS = [
         'LOW', 'MEDIUM', 'HIGH'
     ];
     const navigate = useNavigate();
     const [msg, setMsg] = useState('');
     const update = async (url, { arg }) => {
-        const { TaskId, newPriority } = arg;
+        const { taskId, newPriority } = arg;
         try {
             const response = await backendCall.patch(`/task/${TaskId}/priority`, null, {
                 params: { priority: newPriority }
@@ -35,7 +35,7 @@ export default function UpdatePriority() {
     return (
         <>
             {
-                PRIORITY_OPTIONS.filter((value) => value !== newPriority).map((opt, index) => (
+                PRIORITY_OPTIONS.filter((value) => value !== currentPriority).map((opt, index) => (
                     <div style={{
                         fontSize: '1rem',
                         width: '40%',

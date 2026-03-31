@@ -8,6 +8,10 @@ import com.MoonTask.Backend.task.mapper.TaskMapperDTO;
 import com.MoonTask.Backend.task.repository.TaskRepository;
 import com.MoonTask.Backend.user.entity.UserInfo;
 import com.MoonTask.Backend.user.repository.UserRepo;
+import org.springframework.cache.annotation.CacheConfig;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -19,11 +23,12 @@ import java.util.List;
 /**
  * Service class contains the business logic related to {@link TaskInfo}*/
 @Service
+@CacheConfig(cacheNames = "tasks")
 public class TaskService {
 
-    private TaskRepository repository;
-    private TaskMapperDTO mapper;
-    private UserRepo repo;
+    private final TaskRepository repository;
+    private final TaskMapperDTO mapper;
+    private final UserRepo repo;
 
     public TaskService(TaskRepository repository,
                        TaskMapperDTO mapper,
@@ -45,6 +50,7 @@ public class TaskService {
      * @param priority useful for filtering data
      * @param email for finding particular user
      * @return a list of {@link TaskInfo} task.*/
+    @Cacheable(key = "#email + '_' + #priority")
     public List<TaskInfo> getTasksByPriority(String email, Priority priority){
         return repository.findByUserEmailAndPriority(email, priority);
     }
@@ -54,6 +60,7 @@ public class TaskService {
      * @param email used to find user details
      * @param status useful for filtering data
      * @return a list of {@link TaskInfo} task.*/
+    @Cacheable(key = "#email + '_' + #status")
     public List<TaskInfo> getTasksByStatus(String email, Status status){
         return repository.findByUserEmailAndStatus(email, status);
     }
@@ -62,6 +69,7 @@ public class TaskService {
      * This method is useful for searching for specific task with few letters(you don't need to remember the entire task name)
      * @param word contains the letters fot searching through the database.
      * @return a list of all task that matches the entered word.*/
+    @Cacheable(key = "#email + '_' + #word")
     public List<TaskInfo> searchTask(String email, String word){
         return repository.searchForTask(email, word);
     }
@@ -72,6 +80,7 @@ public class TaskService {
      * @param task container the user enter details about task.
      * @return a string message if task has been added successfully.
      * @throws UsernameNotFoundException if the user details are not present in database.*/
+    @CacheEvict(value = "tasks", allEntries = true)
     public String addTask(UserDetails userDetails, CreateTask task){
         UserInfo user = repo.findByEmail(userDetails.getUsername()).orElseThrow(
                 () -> new UsernameNotFoundException("Please login to save a task."));
@@ -87,6 +96,7 @@ public class TaskService {
      * @param id which task need to be updated determined by id
      * @return a message if task is updated successfully
      * @throws UsernameNotFoundException if no task is presented with id.*/
+    @CachePut(key = "#id")
     public String updatePriority(Priority priority, Integer id){
         TaskInfo task = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException("no task is present")
@@ -100,6 +110,7 @@ public class TaskService {
      * @param status new status
      * @param id which task need to be updated determined by id
      * @return a message if task is successfully updated.*/
+    @CachePut(key = "#id")
     public String updateStatus(Status status, Integer id){
         TaskInfo task = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException("no task is present")
@@ -111,16 +122,16 @@ public class TaskService {
     /**
      * This method is useful for updating the completed time and date.
      * @param id for finding task to update time and task
-     * @return a String if task is completed
+     * @return {@link TaskInfo} object
      * @throws UsernameNotFoundException if no task present with given id.*/
-    public String markAsComplete(Integer id){
+    @CachePut(key = "#id")
+    public TaskInfo markAsComplete(Integer id){
         TaskInfo task = repository.findById(id).orElseThrow(
                 () -> new UsernameNotFoundException("No Task present"));
         task.setCompletedTime(LocalTime.now());
         task.setCompletedDate(LocalDate.now());
         task.setStatus(Status.COMPLETED);
-        repository.save(task);
-        return "Congratulations! on completing task.";
+        return repository.save(task);
     }
 
 }

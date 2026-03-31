@@ -182,8 +182,8 @@ class TaskServiceTest {
         @Test
         void success() {
             when(repo.findById(anyInt())).thenReturn(Optional.of(task));
-            String result = service.markAsComplete(1);
-            assertEquals("Congratulations! on completing task.", result);
+            TaskInfo result = service.markAsComplete(1);
+            assertEquals(task, result);
             verify(repo).save(any(TaskInfo.class));
         }
 

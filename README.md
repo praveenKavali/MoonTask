@@ -10,24 +10,38 @@
 * **Task Categorization:** Sort and filter tasks by Priority and Status.
 * **Smart Completion:** Automatic server-side timestamping when a task is marked as finished.
 * **Containerized:** Local development environment managed via Docker.
+* **Redis Caching:** Integrated Redis to cache frequent task queries, reducing database load and improving response times for the Task Dashboard.
 
 ## ⚙️ Tech Stack
 
 **Frontend:**  React, HTML5, CSS(module), JavaScript  
 **Backend:**  SpringBoot, Java  
 **Database:** PostgreSQL(running via docker)  
-**Testing:** (backend) JUnit, Mockito
-## 🚀 Getting Started
+**Testing:** (backend) JUnit, Mockito  
+**DevOps:** Docker, Docker Compose
+### 🚀 Getting Started
 
-**1. Prerequisites:** JDK 22, Node.js, PostgreSQl  
+The easiest way to run the entire Moon Task ecosystem (Frontend, Backend, Postgres and Redis) is using Docker Compose.
+#### 1.Prerequisites
+* **Docker & Docker Compose** (Recommended) Ensure you have [Docker Desktop](https://www.docker.com/products/docker-desktop/) installed.
+* **JDK 22**, **Node.js**, **Redis 7**, **PostgreSQL** (Only if running without Docker) 
 
-**2. Clone the Repository:** 
+
+
+#### 2. Clone the Repository:
 ```bash 
 git clone https://github.com/praveenKavali/MoonTask.git
 ```
-**3. Backend setup:** Configure application.yaml and run the Spring Boot app.  
+#### 3. Run with Docker
+create a .env file in the root directory with your database/email credential, then run
+```docker-compose up --build```  
+The app will be available at
+http://localhost:5173  
+#### 4.Manual Setup(Optional)
+if you prefer to run the components individually:
+**Backend setup:** Configure application.yaml and run the Spring Boot app.  
 
-**4. Frontend setup:** 
+**Frontend setup:** 
 ```bash
 npm install
 npm run dev

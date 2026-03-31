@@ -1,6 +1,10 @@
 package com.MoonTask.Backend.user.service;
 
 import com.MoonTask.Backend.security.exception.UserException;
+import com.MoonTask.Backend.task.entity.TaskInfo;
+import com.MoonTask.Backend.task.repository.TaskRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -14,7 +18,10 @@ import com.MoonTask.Backend.user.dto.CreateUserDTO;
 import com.MoonTask.Backend.user.dto.UpdateUserDTO;
 import com.MoonTask.Backend.user.repository.UserRepo;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Service class responsible for handling core user related business logic.
@@ -30,18 +37,24 @@ public class UserService implements CrudService<CreateUserDTO, UpdateUserDTO> {
     private final MapperDTO mapper;
     private final JwtService jwtService;
     private final AuthenticationManager authManager;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final TaskRepository repository;
 
     public UserService(UserRepo repo,
                        BCryptPasswordEncoder encoder,
                        MapperDTO mapper,
                        JwtService jwtService,
-                       AuthenticationManager authManager
+                       AuthenticationManager authManager,
+                       RedisTemplate<String, Object> redisTemplate,
+                       TaskRepository repository
     ){
         this.repo = repo;
         this.encoder = encoder;
         this.mapper = mapper;
         this.jwtService = jwtService;
         this.authManager = authManager;
+        this.redisTemplate = redisTemplate;
+        this.repository = repository;
     }
 
     /**
@@ -98,7 +111,14 @@ public class UserService implements CrudService<CreateUserDTO, UpdateUserDTO> {
         if (user.isEmpty()){
             throw new UserException("No user account is present with " + email + ". Please Login.");
         }
+        List<TaskInfo> tasks = repository.getAllTask(email);
+        tasks.forEach(e -> redisTemplate.delete("tasks::" + e.getId()));
         repo.delete(user.get());
+        redisTemplate.delete("token:" + email);
+        Set<String> keys = redisTemplate.keys("tasks::" + email + "*");
+        if (keys != null) {
+            redisTemplate.delete(keys);
+        }
         return "Account deleted successfully.";
     }
 
@@ -116,7 +136,13 @@ public class UserService implements CrudService<CreateUserDTO, UpdateUserDTO> {
         if(!auth.isAuthenticated()){
             throw new UserException("Something went wrong. Please check your email and password.");
         }
-        return jwtService.generateToken(email);
+        String in_memory = (String) redisTemplate.opsForValue().get("token:" + email);
+        if (in_memory != null && !jwtService.isExpired(in_memory)) {
+            return in_memory;
+        }
+        String token = jwtService.generateToken(email);
+        redisTemplate.opsForValue().set("token:" + email, token, 30, TimeUnit.MINUTES);
+        return token;
     }
 
     public String username(UserDetails user) {
